@@ -1,0 +1,276 @@
+---
+---
+
+/* =========================================================================
+   Miguel Santos — blog styles. Self-contained, no theme.
+   Inspired by the Kubernetes / CNCF blog: clean sticky nav, lots of air,
+   one blue accent, comfortable reading column, crisp code blocks.
+   ========================================================================= */
+
+:root {
+  --ink:        #14181d;
+  --body:       #2b333c;
+  --muted:      #6b7682;
+  --accent:     #2f6df6;
+  --accent-dk:  #1c4fd0;
+  --bg:         #ffffff;
+  --panel:      #f6f8fa;
+  --rule:       #e6e9ee;
+  --code-bg:    #0d1117;
+  --code-fg:    #e6edf3;
+  --maxw:       720px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-dk); text-decoration: underline; text-underline-offset: 2px; }
+
+/* --- Sticky nav --------------------------------------------------------- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: saturate(180%) blur(10px);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.brand:hover { color: var(--ink); text-decoration: none; }
+.brand-mark {
+  color: var(--accent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  margin-right: 2px;
+}
+.nav-links a {
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-left: 22px;
+}
+.nav-links a:hover { color: var(--accent); text-decoration: none; }
+
+/* --- Page shell --------------------------------------------------------- */
+
+.page {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 24px;
+  min-height: calc(100vh - 60px - 70px);
+}
+
+/* --- Hero --------------------------------------------------------------- */
+
+.hero {
+  padding: 64px 0 40px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 8px;
+}
+.hero-title {
+  margin: 0 0 12px;
+  font-size: 2.6rem;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+.hero-tagline {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--muted);
+  max-width: 38ch;
+}
+
+/* --- Post feed (home) --------------------------------------------------- */
+
+.post-feed { padding: 8px 0 48px; }
+
+.post-card { border-bottom: 1px solid var(--rule); }
+.post-card-link {
+  display: block;
+  padding: 30px 0;
+  color: inherit;
+}
+.post-card-link:hover { text-decoration: none; }
+.post-card-link:hover .post-card-title { color: var(--accent); }
+.post-card-date {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.post-card-title {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  transition: color 0.12s ease;
+}
+.post-card-excerpt {
+  margin: 0 0 10px;
+  color: var(--body);
+  font-size: 1rem;
+}
+.post-card-more {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* --- Post / page -------------------------------------------------------- */
+
+.post { padding: 44px 0 56px; }
+
+.post-back {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+.post-back:hover { color: var(--accent); text-decoration: none; }
+
+.post-title {
+  margin: 0 0 14px;
+  font-size: 2.3rem;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+.post-meta {
+  margin: 0 0 36px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.post-meta .dot { margin: 0 6px; }
+
+.post-body { font-size: 1.06rem; }
+.post-body > *:first-child { margin-top: 0; }
+
+.post-body h2 {
+  margin: 2em 0 0.6em;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--rule);
+}
+.post-body h3 {
+  margin: 1.6em 0 0.5em;
+  font-size: 1.2rem;
+  color: var(--ink);
+}
+.post-body p, .post-body ul, .post-body ol { margin: 0 0 1.2em; }
+.post-body strong { color: var(--ink); }
+
+/* --- Inline code + blocks ----------------------------------------------- */
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.84em;
+  background: var(--panel);
+  color: #b4423a;
+  padding: 0.14em 0.4em;
+  border-radius: 5px;
+}
+pre {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  border-radius: 10px;
+  padding: 18px 20px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0 0 1.4em;
+}
+pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* --- Tables ------------------------------------------------------------- */
+
+.post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1.6em;
+  font-size: 0.96rem;
+}
+.post-body th, .post-body td {
+  border: 1px solid var(--rule);
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+.post-body th { background: var(--panel); color: var(--ink); font-weight: 600; }
+
+/* --- Blockquote --------------------------------------------------------- */
+
+.post-body blockquote {
+  margin: 0 0 1.4em;
+  padding: 4px 0 4px 18px;
+  border-left: 3px solid var(--accent);
+  color: var(--muted);
+}
+.post-body blockquote p { margin: 0; }
+
+/* --- Footer ------------------------------------------------------------- */
+
+.footer {
+  border-top: 1px solid var(--rule);
+  background: var(--panel);
+}
+.footer-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 24px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.footer-inner a { color: var(--muted); }
+.footer-inner a:hover { color: var(--accent); }
+.footer-sep { margin: 0 8px; }
+
+/* --- Small screens ------------------------------------------------------ */
+
+@media (max-width: 600px) {
+  body { font-size: 17px; }
+  .hero-title { font-size: 2.1rem; }
+  .post-title { font-size: 1.8rem; }
+  .nav-links a { margin-left: 16px; }
+  .nav-inner, .page, .footer-inner { padding-left: 18px; padding-right: 18px; }
+}

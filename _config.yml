@@ -1,18 +1,21 @@
 title: Miguel Santos
+tagline: Infrastructure &amp; platform engineering notes
 author: Miguel Santos
 description: >-
   Infrastructure and platform engineering. Kubernetes, AWS, ArgoCD, Karpenter,
   and the Grafana stack, and the things I learn fixing them.
-
-theme: minima
+url: "https://churi12.github.io"
 github_username: churi12
-show_excerpts: true
 
 permalink: /:year/:month/:title/
-
-header_pages:
-  - about.md
 
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+
+# We ship our own layouts and styles, so don't pull in a theme.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor

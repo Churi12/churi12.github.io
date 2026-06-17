@@ -1,0 +1,18 @@
+---
+layout: default
+---
+
+<article class="post">
+  <header class="post-header">
+    <a class="post-back" href="{{ '/' | relative_url }}">&larr; All writing</a>
+    <h1 class="post-title">{{ page.title }}</h1>
+    <p class="post-meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+      {% if page.author %}<span class="dot">·</span> {{ page.author }}{% endif %}
+    </p>
+  </header>
+
+  <div class="post-body">
+    {{ content }}
+  </div>
+</article>

@@ -1,5 +1,5 @@
 ---
 layout: home
+title: null
 ---
-
-Infrastructure and platform engineering, mostly Kubernetes, AWS, ArgoCD, Karpenter, and the Grafana stack. I write here about things I learned the hard way, usually while fixing them.
+Notes on Kubernetes, AWS, and the platform tools I run in production, usually written right after I figured something out the hard way.
