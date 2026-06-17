@@ -3,6 +3,7 @@ layout: post
 title: "Loki retention and object store lifecycle policies: the rule that quietly corrupts your bucket"
 date: 2026-06-17
 author: Miguel Santos
+tags: [loki]
 ---
 
 If you run Grafana Loki on object storage, there is a sentence in the retention docs that is easy to read past and expensive to get wrong:
