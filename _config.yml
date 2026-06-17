@@ -1,0 +1,13 @@
+title: Miguel Santos
+description: Infrastructure, Kubernetes, and the things I learn fixing them.
+theme: jekyll-theme-minimal
+show_downloads: false
+
+# Used by the minimal theme sidebar
+# (logo and social links are optional; left out for now)
+
+# Build settings
+markdown: kramdown
+permalink: /:year/:month/:title/
+plugins:
+  - jekyll-feed
