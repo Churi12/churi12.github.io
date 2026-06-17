@@ -1,4 +1,0 @@
-Initial blog setup and first post
-
-Set up a GitHub Pages Jekyll site with the minimal theme and add the first
-post on Loki retention versus object store lifecycle policies.
