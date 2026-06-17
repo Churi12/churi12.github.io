@@ -1,5 +1,6 @@
 ---
 layout: home
 title: null
+heading: "Notes from the platform layer"
 ---
-Notes on Kubernetes, AWS, and the platform tools I run in production, usually written right after I figured something out the hard way.
+Kubernetes, AWS, ArgoCD, Karpenter, and the Grafana stack, written up right after I figure something out the hard way.

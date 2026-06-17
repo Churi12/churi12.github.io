@@ -3,7 +3,8 @@ layout: default
 ---
 
 <section class="hero">
-  <h1 class="hero-title">{{ site.title }}</h1>
+  <span class="hero-eyebrow">Writing</span>
+  <h1 class="hero-title">{{ page.heading | default: site.tagline }}</h1>
   <p class="hero-tagline">{{ content | strip_html | strip }}</p>
 </section>
 
@@ -14,7 +15,7 @@ layout: default
       <time class="post-card-date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
       <h2 class="post-card-title">{{ post.title }}</h2>
       <p class="post-card-excerpt">{{ post.excerpt | strip_html | truncate: 180 }}</p>
-      <span class="post-card-more">Read &rarr;</span>
+      <span class="post-card-more">Read article &rarr;</span>
     </a>
   </article>
   {% endfor %}
