@@ -1,0 +1,155 @@
+---
+# Front matter (even if empty) tells Jekyll to process this file with SCSS.
+---
+
+@import "minima";
+
+// ---------------------------------------------------------------------------
+// Custom theme overrides. Restrained, modern, readable. Dark-ink on warm white,
+// a single teal accent, generous spacing, and comfortable code blocks.
+// ---------------------------------------------------------------------------
+
+:root {
+  --ink:        #1b1f24;
+  --muted:      #5c6670;
+  --accent:     #0f8a8a;
+  --accent-dk:  #0a6a6a;
+  --bg:         #fbfbf9;
+  --rule:       #e7e7e1;
+  --code-bg:    #f4f5f2;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrapper {
+  max-width: 760px;
+}
+
+// --- Header -----------------------------------------------------------------
+
+.site-header {
+  border-top: none;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+}
+
+.site-title,
+.site-title:visited {
+  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.site-nav .page-link {
+  color: var(--muted);
+  &:hover { color: var(--accent); text-decoration: none; }
+}
+
+// --- Links ------------------------------------------------------------------
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  &:hover { color: var(--accent-dk); text-decoration: underline; text-underline-offset: 2px; }
+}
+
+// --- Headings ---------------------------------------------------------------
+
+h1, h2, h3, h4 {
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  margin-top: 1.8em;
+}
+
+.post-title {
+  font-size: 2.1rem;
+  line-height: 1.2;
+  margin-top: 0.2em;
+}
+
+.post-content h2 {
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid var(--rule);
+}
+
+// --- Post meta / byline -----------------------------------------------------
+
+.post-meta {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+// --- Home: post list --------------------------------------------------------
+
+.post-list {
+  margin-left: 0;
+  list-style: none;
+
+  > li {
+    padding: 1.4rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .post-meta { display: block; margin-bottom: 0.2rem; }
+
+  .post-link {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--ink);
+    &:hover { color: var(--accent); text-decoration: none; }
+  }
+}
+
+// --- Code -------------------------------------------------------------------
+
+code {
+  background: var(--code-bg);
+  border-radius: 4px;
+  padding: 0.12em 0.36em;
+  font-size: 0.86em;
+}
+
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 1rem 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  > code { background: none; padding: 0; }
+}
+
+// --- Tables -----------------------------------------------------------------
+
+table {
+  font-size: 0.95rem;
+  border-collapse: collapse;
+  th, td { border: 1px solid var(--rule); padding: 0.5rem 0.7rem; }
+  th { background: var(--code-bg); }
+  tr:nth-child(even) { background: transparent; }
+}
+
+// --- Blockquote -------------------------------------------------------------
+
+blockquote {
+  color: var(--muted);
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
+  font-style: normal;
+}
+
+// --- Footer -----------------------------------------------------------------
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.9rem;
+}

@@ -1,5 +1,4 @@
 title: Miguel Santos
-email: miguel_cristinha@hotmail.com
 author: Miguel Santos
 description: >-
   Infrastructure and platform engineering. Kubernetes, AWS, ArgoCD, Karpenter,
@@ -10,6 +9,9 @@ github_username: churi12
 show_excerpts: true
 
 permalink: /:year/:month/:title/
+
+header_pages:
+  - about.md
 
 plugins:
   - jekyll-feed
