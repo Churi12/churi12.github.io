@@ -1,7 +1,6 @@
 # CLAUDE.md — churi12.github.io
 
-Personal technical blog for Miguel Santos (GitHub: **Churi12**, personal email
-**miguel_cristinha@hotmail.com**). Static Jekyll site hosted on GitHub Pages.
+Personal technical blog for Miguel Santos (GitHub: **Churi12**. Static Jekyll site hosted on GitHub Pages.
 Live at **https://churi12.github.io**.
 
 ## What this is
