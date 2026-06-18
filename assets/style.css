@@ -2,30 +2,30 @@
 ---
 
 /* =========================================================================
-   Miguel Santos — "the terminal as editorial."
-   Subject: a platform engineer who lives in a shell. The page borrows the
-   vernacular of that world — prompt sigils, structured status lines, a
-   dashboard "Ready" green — but sets it in real editorial typography so it
-   reads as a publication, not a gimmick.
+   Miguel Santos — "the terminal as editorial." Dark.
+   A considered dark theme: layered ink surfaces (never pure black), off-white
+   text with a real hierarchy, and a single muted teal signal used only for
+   prompts, status, and links. The personality is the typography and the
+   terminal vernacular, not a neon glow.
 
    Type:   IBM Plex Sans (display + body) / IBM Plex Mono (structure, code)
-   Palette: cool paper, deep slate ink, one muted teal signal
-   Signature: the shell-prompt hero + status-line post metadata
+   Palette: deep ink base, raised panel, off-white text, muted teal signal
    ========================================================================= */
 
 :root {
-  --paper:    #f7f8fa;
-  --panel:    #ffffff;
-  --ink:      #0f141a;
-  --body:     #39424d;
-  --muted:    #71808f;
-  --signal:   #0fa47f;   /* dashboard "Ready" green, muted — not acid */
-  --signal-dk:#0b7d60;
-  --rule:     #e4e8ee;
-  --term-bg:  #0f141a;
-  --term-fg:  #d7dde6;
-  --term-dim: #7d8896;
-  --maxw:     720px;
+  --bg:        #0e1217;   /* deep ink, faint blue-green undertone, not #000 */
+  --panel:     #161c23;   /* raised surface: footer, table head, hover */
+  --ink:       #eef2f6;   /* brightest: headings, titles */
+  --body:      #b2bdc8;   /* body text */
+  --muted:     #6f7d8a;   /* meta, captions */
+  --signal:    #19bd95;   /* dots, prompt sigil, brand mark */
+  --link:      #38d2ad;   /* links + hover — brighter for dark legibility */
+  --rule:      #232b34;   /* hairlines, borders */
+  --code-bg:   #0a0d11;   /* code: a deep terminal window */
+  --code-fg:   #d8dee8;
+  --code-bd:   #232c35;
+  --chip-bg:   rgba(25, 189, 149, 0.14);
+  --maxw:      720px;
   --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -34,7 +34,7 @@
 
 body {
   margin: 0;
-  background: var(--paper);
+  background: var(--bg);
   color: var(--body);
   font-family: var(--sans);
   font-size: 18px;
@@ -43,16 +43,18 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-a { color: var(--signal-dk); text-decoration: none; }
+a { color: var(--link); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+::selection { background: rgba(25, 189, 149, 0.28); color: var(--ink); }
 
 /* --- Nav ---------------------------------------------------------------- */
 
 .nav {
   position: sticky; top: 0; z-index: 50;
-  background: rgba(247, 248, 250, 0.85);
-  backdrop-filter: saturate(180%) blur(10px);
-  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  background: rgba(14, 18, 23, 0.82);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
   border-bottom: 1px solid var(--rule);
 }
 .nav-inner {
@@ -60,17 +62,13 @@ a:hover { text-decoration: underline; text-underline-offset: 2px; }
   height: 62px; display: flex; align-items: center; justify-content: space-between;
 }
 .brand {
-  font-family: var(--mono);
-  font-weight: 600; font-size: 1rem;
-  color: var(--ink);
+  font-family: var(--mono); font-weight: 600; font-size: 1rem; color: var(--ink);
 }
 .brand:hover { color: var(--ink); text-decoration: none; }
 .brand-path { color: var(--signal); }
 .nav-links { font-family: var(--mono); font-size: 0.9rem; }
-.nav-links a {
-  color: var(--muted); margin-left: 22px;
-}
-.nav-links a:hover { color: var(--signal-dk); text-decoration: none; }
+.nav-links a { color: var(--muted); margin-left: 22px; }
+.nav-links a:hover { color: var(--link); text-decoration: none; }
 
 /* --- Page shell --------------------------------------------------------- */
 
@@ -83,17 +81,13 @@ a:hover { text-decoration: underline; text-underline-offset: 2px; }
 
 .hero { padding: 76px 0 44px; border-bottom: 1px solid var(--rule); }
 
-.prompt {
-  font-family: var(--mono); font-size: 0.95rem;
-  color: var(--muted); margin-bottom: 22px;
-}
+.prompt { font-family: var(--mono); font-size: 0.95rem; color: var(--muted); margin-bottom: 22px; }
 .prompt-sigil { color: var(--signal); font-weight: 600; margin-right: 8px; }
 .prompt-cmd { color: var(--ink); }
 .prompt-cmd::after {
   content: "";
   display: inline-block; width: 8px; height: 1.05em;
-  background: var(--signal); margin-left: 6px;
-  vertical-align: text-bottom;
+  background: var(--signal); margin-left: 6px; vertical-align: text-bottom;
   animation: blink 1.2s steps(1) infinite;
 }
 @keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
@@ -101,82 +95,58 @@ a:hover { text-decoration: underline; text-underline-offset: 2px; }
 .hero-title {
   margin: 0 0 18px;
   font-size: 3rem; font-weight: 700; line-height: 1.06;
-  letter-spacing: -0.03em; color: var(--ink);
-  max-width: 17ch;
+  letter-spacing: -0.03em; color: var(--ink); max-width: 17ch;
 }
-.hero-tagline {
-  margin: 0; font-size: 1.2rem; line-height: 1.55;
-  color: var(--muted); max-width: 48ch;
-}
+.hero-tagline { margin: 0; font-size: 1.2rem; line-height: 1.55; color: var(--muted); max-width: 48ch; }
 
 /* --- Post feed ---------------------------------------------------------- */
 
 .post-feed { padding: 18px 0 56px; }
 
-.feed-label {
-  font-family: var(--mono); font-size: 0.85rem; color: var(--muted);
-  padding: 14px 0; margin-bottom: 4px;
-}
+.feed-label { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); padding: 14px 0; margin-bottom: 4px; }
 .feed-label .prompt-sigil { margin-right: 8px; }
 
 .post-card { border-top: 1px solid var(--rule); }
 .post-card:last-child { border-bottom: 1px solid var(--rule); }
 .post-card-link { display: block; padding: 28px 0; color: inherit; }
 .post-card-link:hover { text-decoration: none; }
-.post-card-link:hover .post-card-title { color: var(--signal-dk); }
+.post-card-link:hover .post-card-title { color: var(--link); }
 
 .post-card-status, .post-status {
   display: flex; align-items: center; gap: 10px;
-  font-family: var(--mono); font-size: 0.82rem; color: var(--muted);
-  margin-bottom: 10px;
+  font-family: var(--mono); font-size: 0.82rem; color: var(--muted); margin-bottom: 10px;
 }
 .status-dot {
   width: 8px; height: 8px; border-radius: 50%;
-  background: var(--signal);
-  box-shadow: 0 0 0 3px rgba(15, 164, 127, 0.18);
+  background: var(--signal); box-shadow: 0 0 0 3px rgba(25, 189, 149, 0.20);
   flex: none;
 }
 .post-card-tag {
-  font-family: var(--mono); font-size: 0.74rem;
-  color: var(--signal-dk);
-  background: rgba(15, 164, 127, 0.10);
-  padding: 2px 8px; border-radius: 4px;
+  font-family: var(--mono); font-size: 0.74rem; color: var(--link);
+  background: var(--chip-bg); padding: 2px 8px; border-radius: 4px;
 }
 .status-sep { color: var(--rule); }
 
 .post-card-title {
-  margin: 0 0 8px;
-  font-size: 1.5rem; font-weight: 600; line-height: 1.22;
-  letter-spacing: -0.02em; color: var(--ink);
-  transition: color 0.12s ease;
+  margin: 0 0 8px; font-size: 1.5rem; font-weight: 600; line-height: 1.22;
+  letter-spacing: -0.02em; color: var(--ink); transition: color 0.12s ease;
 }
 .post-card-excerpt { margin: 0 0 12px; color: var(--body); font-size: 1rem; }
-.post-card-more {
-  font-family: var(--mono); font-size: 0.85rem; font-weight: 500;
-  color: var(--signal-dk);
-}
+.post-card-more { font-family: var(--mono); font-size: 0.85rem; font-weight: 500; color: var(--link); }
 
 /* --- Post / page -------------------------------------------------------- */
 
 .post { padding: 44px 0 64px; }
-.post-back {
-  font-family: var(--mono); font-size: 0.85rem; color: var(--muted);
-  display: inline-block; margin-bottom: 24px;
-}
-.post-back:hover { color: var(--signal-dk); text-decoration: none; }
-.post-title {
-  margin: 0 0 16px;
-  font-size: 2.4rem; font-weight: 700; line-height: 1.12;
-  letter-spacing: -0.03em; color: var(--ink);
-}
+.post-back { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); display: inline-block; margin-bottom: 24px; }
+.post-back:hover { color: var(--link); text-decoration: none; }
+.post-title { margin: 0 0 16px; font-size: 2.4rem; font-weight: 700; line-height: 1.12; letter-spacing: -0.03em; color: var(--ink); }
 .post-status { margin: 0 0 40px; }
 
 .post-body { font-size: 1.06rem; }
 .post-body > *:first-child { margin-top: 0; }
 .post-body h2 {
-  margin: 2em 0 0.6em; font-size: 1.45rem; font-weight: 600;
-  letter-spacing: -0.02em; color: var(--ink);
-  padding-bottom: 0.3em; border-bottom: 1px solid var(--rule);
+  margin: 2em 0 0.6em; font-size: 1.45rem; font-weight: 600; letter-spacing: -0.02em;
+  color: var(--ink); padding-bottom: 0.3em; border-bottom: 1px solid var(--rule);
 }
 .post-body h3 { margin: 1.7em 0 0.5em; font-size: 1.18rem; font-weight: 600; color: var(--ink); }
 .post-body p, .post-body ul, .post-body ol { margin: 0 0 1.25em; }
@@ -187,34 +157,26 @@ a:hover { text-decoration: underline; text-underline-offset: 2px; }
 
 code {
   font-family: var(--mono); font-size: 0.85em;
-  background: rgba(15, 164, 127, 0.09); color: var(--signal-dk);
+  background: var(--chip-bg); color: #66e2c1;
   padding: 0.13em 0.4em; border-radius: 5px;
 }
 pre {
-  background: var(--term-bg); color: var(--term-fg);
-  border-radius: 10px; padding: 18px 20px; overflow-x: auto;
-  font-family: var(--mono); font-size: 0.84rem; line-height: 1.6;
-  margin: 0 0 1.5em;
-  border: 1px solid #1c2530;
+  background: var(--code-bg); color: var(--code-fg);
+  border: 1px solid var(--code-bd); border-radius: 10px;
+  padding: 18px 20px; overflow-x: auto;
+  font-family: var(--mono); font-size: 0.84rem; line-height: 1.6; margin: 0 0 1.5em;
 }
 pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
 
 /* --- Tables ------------------------------------------------------------- */
 
-.post-body table {
-  width: 100%; border-collapse: collapse; margin: 0 0 1.6em; font-size: 0.95rem;
-}
-.post-body th, .post-body td {
-  border: 1px solid var(--rule); padding: 0.55rem 0.75rem; text-align: left; vertical-align: top;
-}
-.post-body th { background: var(--paper); color: var(--ink); font-weight: 600; font-family: var(--mono); font-size: 0.85rem; }
+.post-body table { width: 100%; border-collapse: collapse; margin: 0 0 1.6em; font-size: 0.95rem; }
+.post-body th, .post-body td { border: 1px solid var(--rule); padding: 0.55rem 0.75rem; text-align: left; vertical-align: top; }
+.post-body th { background: var(--panel); color: var(--ink); font-weight: 600; font-family: var(--mono); font-size: 0.85rem; }
 
 /* --- Blockquote --------------------------------------------------------- */
 
-.post-body blockquote {
-  margin: 0 0 1.5em; padding: 4px 0 4px 18px;
-  border-left: 3px solid var(--signal); color: var(--muted);
-}
+.post-body blockquote { margin: 0 0 1.5em; padding: 4px 0 4px 18px; border-left: 3px solid var(--signal); color: var(--muted); }
 .post-body blockquote p { margin: 0; }
 
 /* --- Footer ------------------------------------------------------------- */
@@ -228,7 +190,7 @@ pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
 .footer-inner .comment { color: var(--muted); }
 .footer-links a { color: var(--muted); margin-left: 16px; }
 .footer-links a:first-child { margin-left: 0; }
-.footer-links a:hover { color: var(--signal-dk); }
+.footer-links a:hover { color: var(--link); }
 
 /* --- Responsive + a11y -------------------------------------------------- */
 
