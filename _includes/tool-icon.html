@@ -2,7 +2,7 @@
   Original, minimal geometric marks in the site's own teal/mono language —
   NOT the upstream brand logos. Keyed on a tool tag. All strokes use
   currentColor so CSS controls the tint. Unknown tags get a generic prompt mark.
-  Usage: {% include tool-icon.html tag=post.tags[0] %}
+  Usage: {% assign tool_tag = post.tags | first %}{% include tool-icon.html tag=tool_tag %}
 {%- endcomment -%}
 {%- assign t = include.tag | downcase -%}
 <span class="tool-icon" aria-hidden="true" data-tool="{{ t }}">

@@ -21,7 +21,7 @@ layout: default
         <time class="post-card-date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
         {% if post.tags.size > 0 %}<span class="post-card-tag">{{ post.tags | first }}</span>{% endif %}
       </div>
-      <h2 class="post-card-title">{% if post.tags.size > 0 %}{% include tool-icon.html tag=post.tags[0] %}{% endif %}{{ post.title }}</h2>
+      <h2 class="post-card-title">{% if post.tags.size > 0 %}{% assign tool_tag = post.tags | first %}{% include tool-icon.html tag=tool_tag %}{% endif %}{{ post.title }}</h2>
       <p class="post-card-excerpt">{{ post.excerpt | strip_html | truncate: 165 }}</p>
       <span class="post-card-more">cat article &rarr;</span>
     </a>
