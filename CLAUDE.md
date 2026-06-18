@@ -79,3 +79,16 @@ Commit, push to `main`, the Actions workflow builds and deploys in ~1 minute.
 - `2026-06-18` Karpenter provisions, kube-scheduler binds → aws/karpenter-provider-aws#9264
 - `2026-06-18` Running loki-canary to catch silent log loss → grafana/loki#22438
 - `2026-06-18` Integration-testing the Mimir compactor → grafana/mimir#15709
+- `2026-06-18` A timestamp was busting my Go build cache in Alloy → grafana/alloy#6541
+- `2026-06-18` Zone-aware Mimir pointed its ingress at a missing service → grafana/mimir#15740
+
+## Tool icons (added 2026-06-18)
+
+Each post shows a small tool mark keyed on its first tag, via `_includes/tool-icon.html`
+(rendered in `home.html` feed cards, left of the title, and in `post.html` header as a
+labeled badge). The marks are ORIGINAL minimal geometry in the site's teal/mono language
+(loki = stacked log lines, mimir = concentric rings, karpenter = scaling chevrons,
+alloy = fused diamonds), NOT the upstream brand logos — keeps the palette and avoids
+trademark issues. Unknown tags fall back to a generic `>_` prompt glyph. To add a tool,
+add a `when` arm to the include and (optionally) note it here. SVGs use `currentColor`;
+styling is in the "Tool icons" block of `assets/style.css`.

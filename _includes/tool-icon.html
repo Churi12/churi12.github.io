@@ -1,0 +1,42 @@
+{%- comment -%}
+  Original, minimal geometric marks in the site's own teal/mono language —
+  NOT the upstream brand logos. Keyed on a tool tag. All strokes use
+  currentColor so CSS controls the tint. Unknown tags get a generic prompt mark.
+  Usage: {% include tool-icon.html tag=post.tags[0] %}
+{%- endcomment -%}
+{%- assign t = include.tag | downcase -%}
+<span class="tool-icon" aria-hidden="true" data-tool="{{ t }}">
+{%- case t -%}
+{%- when 'loki' -%}
+  {%- comment -%} stacked log lines {%- endcomment -%}
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <line x1="5" y1="7" x2="19" y2="7"/>
+    <line x1="5" y1="12" x2="15" y2="12"/>
+    <line x1="5" y1="17" x2="17" y2="17"/>
+  </svg>
+{%- when 'mimir' -%}
+  {%- comment -%} concentric rings: Mimir's well {%- endcomment -%}
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="9"/>
+    <circle cx="12" cy="12" r="4"/>
+  </svg>
+{%- when 'karpenter' -%}
+  {%- comment -%} scaling chevrons / nodes {%- endcomment -%}
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="5 14 12 7 19 14"/>
+    <polyline points="5 19 12 12 19 19"/>
+  </svg>
+{%- when 'alloy' -%}
+  {%- comment -%} two diamonds fused: an alloy {%- endcomment -%}
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+    <rect x="3.8" y="3.8" width="9" height="9" transform="rotate(45 8.3 8.3)"/>
+    <rect x="11.2" y="11.2" width="9" height="9" transform="rotate(45 15.7 15.7)"/>
+  </svg>
+{%- else -%}
+  {%- comment -%} generic: a shell prompt block {%- endcomment -%}
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="6 8 10 12 6 16"/>
+    <line x1="12" y1="16" x2="18" y2="16"/>
+  </svg>
+{%- endcase -%}
+</span>

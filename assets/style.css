@@ -134,6 +134,34 @@ a:hover { text-decoration: underline; text-underline-offset: 2px; }
 .post-card-excerpt { margin: 0 0 12px; color: var(--body); font-size: 1rem; }
 .post-card-more { font-family: var(--mono); font-size: 0.85rem; font-weight: 500; color: var(--link); }
 
+/* --- Tool icons (original geometric marks, tinted by palette) ----------- */
+
+.tool-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; flex: none;
+  border: 1px solid var(--rule); border-radius: 6px;
+  background: var(--chip-bg); color: var(--link);
+  vertical-align: middle;
+}
+.tool-icon svg { width: 15px; height: 15px; }
+
+/* In the feed, the mark sits just left of the title. */
+.post-card-title .tool-icon {
+  margin-right: 10px; transform: translateY(-1px);
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+.post-card-link:hover .tool-icon { border-color: var(--link); }
+
+/* On the article, a labeled mark above the title. */
+.post-tool-mark {
+  display: inline-flex; align-items: center; gap: 9px;
+  margin-bottom: 16px;
+}
+.post-tool-name {
+  font-family: var(--mono); font-size: 0.8rem; font-weight: 500;
+  color: var(--link); letter-spacing: 0.01em;
+}
+
 /* --- Post / page -------------------------------------------------------- */
 
 .post { padding: 44px 0 64px; }
