@@ -83,6 +83,7 @@ Commit, push to `main`, the Actions workflow builds and deploys in ~1 minute.
 - `2026-06-18` Zone-aware Mimir pointed its ingress at a missing service → grafana/mimir#15740
 - `2026-06-23` ExternalDNS created the AAAA record, then forgot it existed → kubernetes-sigs/external-dns#6517
 - `2026-06-27` A secret got printed as a Go struct into my scrape target → grafana/alloy#6605
+- `2026-06-27` Argo CD could not lock the ref, so it gave up → argoproj/argo-cd#28469
 
 ## Tool icons (added 2026-06-18)
 

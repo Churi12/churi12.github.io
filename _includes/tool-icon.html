@@ -39,6 +39,13 @@
     <circle cx="18" cy="12" r="2.5"/>
     <line x1="8.5" y1="12" x2="15.5" y2="12"/>
   </svg>
+{%- when 'argo-cd' -%}
+  {%- comment -%} an octagon ring with a sync arrow: GitOps reconciliation {%- endcomment -%}
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="8.5 3.5 15.5 3.5 20.5 8.5 20.5 15.5 15.5 20.5 8.5 20.5 3.5 15.5 3.5 8.5"/>
+    <polyline points="14 9 16 9 16 7"/>
+    <path d="M16 9 A4 4 0 1 0 16 15"/>
+  </svg>
 {%- else -%}
   {%- comment -%} generic: a shell prompt block {%- endcomment -%}
   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
