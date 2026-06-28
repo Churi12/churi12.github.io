@@ -87,6 +87,7 @@ Commit, push to `main`, the Actions workflow builds and deploys in ~1 minute.
 - `2026-06-28` Istio built the validation context, then refused to authorize it → istio/istio#60720
 - `2026-06-28` The CNI pod was waiting for a file only it could write → istio/istio#60721
 - `2026-06-28` A CIDR and a list of /32s should be the same thing → istio/istio#60722
+- `2026-06-29` The label that wrapped → grafana/grafana-tempo-datasource#205
 
 ## Tool icons (added 2026-06-18)
 
@@ -96,7 +97,8 @@ labeled badge). The marks are ORIGINAL minimal geometry in the site's teal/mono 
 (loki = stacked log lines, mimir = concentric rings, karpenter = scaling chevrons,
 alloy = fused diamonds, external-dns = two linked nodes / a record resolving to an
 address, argo-cd = octagon ring with sync arrow, istio = three nodes wired through a
-center / the sidecar mesh), NOT the upstream brand logos — keeps the palette and avoids
+center / the sidecar mesh, tempo = a trace waterfall / staggered spans on a
+timeline), NOT the upstream brand logos — keeps the palette and avoids
 trademark issues. Unknown tags fall back to a generic `>_` prompt glyph. To add a tool,
 add a `when` arm to the include and (optionally) note it here. SVGs use `currentColor`;
 styling is in the "Tool icons" block of `assets/style.css`.
