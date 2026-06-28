@@ -9,6 +9,11 @@ github_username: churi12
 
 permalink: /:year/:month/:title/
 
+# Build posts dated "today" even when the CI build clock (UTC) is still on the
+# previous day. Without this, a post written in the evening local time is dated
+# ahead of the UTC build time and Jekyll silently skips it.
+future: true
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
