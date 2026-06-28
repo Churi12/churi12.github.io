@@ -84,6 +84,9 @@ Commit, push to `main`, the Actions workflow builds and deploys in ~1 minute.
 - `2026-06-23` ExternalDNS created the AAAA record, then forgot it existed → kubernetes-sigs/external-dns#6517
 - `2026-06-27` A secret got printed as a Go struct into my scrape target → grafana/alloy#6605
 - `2026-06-27` Argo CD could not lock the ref, so it gave up → argoproj/argo-cd#28469
+- `2026-06-28` Istio built the validation context, then refused to authorize it → istio/istio#60720
+- `2026-06-28` The CNI pod was waiting for a file only it could write → istio/istio#60721
+- `2026-06-28` A CIDR and a list of /32s should be the same thing → istio/istio#60722
 
 ## Tool icons (added 2026-06-18)
 
@@ -92,7 +95,8 @@ Each post shows a small tool mark keyed on its first tag, via `_includes/tool-ic
 labeled badge). The marks are ORIGINAL minimal geometry in the site's teal/mono language
 (loki = stacked log lines, mimir = concentric rings, karpenter = scaling chevrons,
 alloy = fused diamonds, external-dns = two linked nodes / a record resolving to an
-address), NOT the upstream brand logos — keeps the palette and avoids
+address, argo-cd = octagon ring with sync arrow, istio = three nodes wired through a
+center / the sidecar mesh), NOT the upstream brand logos — keeps the palette and avoids
 trademark issues. Unknown tags fall back to a generic `>_` prompt glyph. To add a tool,
 add a `when` arm to the include and (optionally) note it here. SVGs use `currentColor`;
 styling is in the "Tool icons" block of `assets/style.css`.
