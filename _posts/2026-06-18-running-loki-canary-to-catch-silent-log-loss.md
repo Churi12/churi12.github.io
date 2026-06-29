@@ -4,6 +4,7 @@ title: "Running loki-canary to catch the logs Loki silently drops"
 date: 2026-06-18
 author: Miguel Santos
 tags: [loki]
+pr_status: merged
 ---
 
 The failure mode that scares me most with a logging stack is not the loud one. A crashed ingester pages you. The quiet one — Loki accepting writes, returning 200s, and silently dropping a fraction of lines somewhere between push and store — does not, and you only find out when you go looking for a log during an incident and it is not there. `loki-canary` exists to make that quiet failure loud, and it is underused mostly because its docs were thin. I spent some time fixing those docs upstream, so here is the practical version.

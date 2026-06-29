@@ -4,6 +4,7 @@ title: "Argo CD could not lock the ref, so it gave up"
 date: 2026-06-27
 author: Miguel Santos
 tags: [argo-cd]
+pr_status: merged
 ---
 
 A maintainer filed an Argo CD bug that caught my eye because it lived right at the seam between a distributed system and a plain old git command. The source hydrator was failing with:

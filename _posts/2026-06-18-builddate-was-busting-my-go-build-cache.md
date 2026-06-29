@@ -4,6 +4,7 @@ title: "A timestamp was quietly busting my Go build cache in Alloy"
 date: 2026-06-18
 author: Miguel Santos
 tags: [alloy]
+pr_status: merged
 ---
 
 Every time I rebuilt Grafana Alloy locally, it relinked the whole binary even when I had changed nothing. For a project this size that is a real chunk of wall-clock on every iteration, and it should not happen — Go's build cache is supposed to make a no-op rebuild nearly free. The cause turned out to be a single linker flag, and the fix is small enough to explain in one post.

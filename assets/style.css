@@ -162,6 +162,23 @@ a:hover { text-decoration: underline; text-underline-offset: 2px; }
   color: var(--link); letter-spacing: 0.01em;
 }
 
+/* --- Merged badge (git-merge mark, signals a landed PR) ----------------- */
+
+.merged-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  vertical-align: middle; margin-left: 12px;
+  font-family: var(--mono); font-size: 0.62em; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: lowercase;
+  color: var(--signal);
+  background: var(--chip-bg); border: 1px solid rgba(25, 189, 149, 0.35);
+  padding: 3px 8px 3px 6px; border-radius: 999px;
+  position: relative; top: -0.12em;
+}
+.merged-badge svg { width: 13px; height: 13px; flex: none; }
+.merged-badge-text { line-height: 1; }
+/* In the feed the title turns teal on hover; keep the badge legible there. */
+.post-card-link:hover .merged-badge { border-color: var(--link); }
+
 /* --- Post / page -------------------------------------------------------- */
 
 .post { padding: 44px 0 64px; }

@@ -6,7 +6,7 @@ layout: default
   <header class="post-header">
     <a class="post-back" href="{{ '/' | relative_url }}">&larr; cd ..</a>
     {% if page.tags.size > 0 %}{% assign tool_tag = page.tags | first %}<div class="post-tool-mark">{% include tool-icon.html tag=tool_tag %}<span class="post-tool-name">{{ tool_tag }}</span></div>{% endif %}
-    <h1 class="post-title">{{ page.title }}</h1>
+    <h1 class="post-title">{{ page.title }}{% if page.pr_status == 'merged' %}{% include merged-badge.html %}{% endif %}</h1>
     <div class="post-status">
       <span class="status-dot" aria-hidden="true"></span>
       <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y-%m-%d" }}</time>

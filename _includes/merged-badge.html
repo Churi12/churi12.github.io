@@ -1,0 +1,17 @@
+{%- comment -%}
+  Original "merged" mark in the site's teal/mono language: a git-merge glyph —
+  a side branch curving into the trunk, two nodes joined at a third. Rendered
+  inline after a post title when front matter sets `pr_status: merged`.
+  Strokes use currentColor so CSS controls the tint.
+  Usage: {% if post.pr_status == 'merged' %}{% include merged-badge.html %}{% endif %}
+{%- endcomment -%}
+<span class="merged-badge" title="Merged upstream">
+  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="6" cy="5" r="2.2"/>
+    <circle cx="6" cy="19" r="2.2"/>
+    <circle cx="18" cy="12" r="2.2"/>
+    <path d="M6 7.2 L6 16.8"/>
+    <path d="M6 9 C6 13, 9.5 12, 15.6 12"/>
+  </svg>
+  <span class="merged-badge-text">merged</span>
+</span>
