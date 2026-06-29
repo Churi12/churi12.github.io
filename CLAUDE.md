@@ -102,3 +102,15 @@ timeline), NOT the upstream brand logos — keeps the palette and avoids
 trademark issues. Unknown tags fall back to a generic `>_` prompt glyph. To add a tool,
 add a `when` arm to the include and (optionally) note it here. SVGs use `currentColor`;
 styling is in the "Tool icons" block of `assets/style.css`.
+
+## Merged badge (added 2026-06-29)
+
+When a post's upstream PR lands, set `pr_status: merged` in its front matter. Both
+layouts then render `_includes/merged-badge.html` inline after the title (feed card in
+`home.html`, article `<h1>` in `post.html`) — an original git-merge glyph (side branch
+curving into the trunk) plus the lowercase word `merged`, as a small teal pill. Styling
+is the "Merged badge" block in `assets/style.css`. No badge shows without the front
+matter flag, so open PRs stay clean. To mark a newly merged PR: add the one front-matter
+line and (separately) append ", now merged." to that post's closing PR sentence. As of
+2026-06-29 the four landed posts carry it: alloy #6541, loki #22437, loki #22438,
+argo-cd #28469.
