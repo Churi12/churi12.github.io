@@ -63,4 +63,4 @@ If `unexpected_entries` is high rather than `missing`, the usual fix is raising 
 
 ## Why bother
 
-A logging system you cannot trust is worse than no logging system, because you make decisions on it during incidents. The canary is maybe ten minutes to deploy and turns "I hope Loki is not dropping anything" into a metric you can alert on. The full flag reference and troubleshooting guide now live in the [loki-canary docs](https://grafana.com/docs/loki/latest/operations/loki-canary/) — I sent the expansion upstream after hitting the gaps myself.
+A logging system you cannot trust is worse than no logging system, because you make decisions on it during incidents. The canary is maybe ten minutes to deploy and turns "I hope Loki is not dropping anything" into a metric you can alert on. The full flag reference and troubleshooting guide now live in the [loki-canary docs](https://grafana.com/docs/loki/latest/operations/loki-canary/) — I sent the expansion upstream after hitting the gaps myself. The change is in [grafana/loki#22438](https://github.com/grafana/loki/pull/22438), now merged.

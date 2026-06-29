@@ -90,4 +90,4 @@ For most deployments, the compactor alone is enough and you do not need a lifecy
 - `loki_cluster_seed.json` and the delete-request store are not log data and must survive.
 - If you must have a lifecycle rule, make its TTL longer than retention plus the delete delay.
 
-Most of this is now in the Loki retention docs. The fastest way I have found to actually understand a tool is to fix the part of its documentation that confused me, because you cannot write the fix until you have read enough of the source to be sure.
+Most of this is now in the Loki retention docs. The change is in [grafana/loki#22437](https://github.com/grafana/loki/pull/22437), now merged. The fastest way I have found to actually understand a tool is to fix the part of its documentation that confused me, because you cannot write the fix until you have read enough of the source to be sure.

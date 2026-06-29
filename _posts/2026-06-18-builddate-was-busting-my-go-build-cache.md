@@ -40,4 +40,4 @@ An empty `BuildDate` is harmless: it is a plain string passed through to the ver
 
 If a build relinks when nothing changed, look for an input that varies on its own: a timestamp, a hostname, a random seed baked in through `-ldflags`. The cache is rarely broken; it is usually being handed a moving target. The reproducible-builds people have known this for years, which is exactly why `SOURCE_DATE_EPOCH` exists — pin the clock and the output stops moving. The same instinct fixes the local loop: do not stamp a clock into an artifact that does not need one.
 
-Small change, but it is the kind I like — read the source, prove the cause, remove the moving part, leave the real builds untouched. The change is in [grafana/alloy#6541](https://github.com/grafana/alloy/pull/6541).
+Small change, but it is the kind I like — read the source, prove the cause, remove the moving part, leave the real builds untouched. The change is in [grafana/alloy#6541](https://github.com/grafana/alloy/pull/6541), now merged.
