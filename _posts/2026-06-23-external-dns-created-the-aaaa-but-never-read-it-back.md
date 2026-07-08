@@ -4,6 +4,7 @@ title: "ExternalDNS created the AAAA record, then forgot it existed"
 date: 2026-06-23
 author: Miguel Santos
 tags: [external-dns]
+pr_status: merged
 ---
 
 ExternalDNS is a reconcile loop. Every minute it reads the records that exist at your DNS provider, reads the records your Kubernetes resources say should exist, diffs the two, and applies the difference. That loop only converges if the read side and the write side agree on what a record is. If the controller can create something it cannot later see, it will create it forever. That is exactly what was happening to AAAA records on the DNSimple provider. The fix looked like one line. Review showed me it was not, because making the record visible turned out to expose a second bug that had been hiding behind the first.
@@ -88,4 +89,4 @@ When a controller keeps trying to do something that already succeeded, suspect a
 
 But the lesson I actually took from this one is about the second bug. Making a record type visible was not a self-contained one-liner; it changed which code paths the record now flows through, and one of those paths had a latent assumption (name is unique) that was only ever true because of the bug I was fixing. Fixes have a blast radius. I would not have seen this one without a careful reviewer, which is most of the argument for sending the change upstream in the open rather than just patching my own fork.
 
-The change is in [kubernetes-sigs/external-dns#6517](https://github.com/kubernetes-sigs/external-dns/pull/6517).
+The change is in [kubernetes-sigs/external-dns#6517](https://github.com/kubernetes-sigs/external-dns/pull/6517), now merged.
