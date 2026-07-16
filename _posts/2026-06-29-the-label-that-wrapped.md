@@ -4,6 +4,7 @@ title: "The label that wrapped"
 date: 2026-06-29
 author: Miguel Santos
 tags: [tempo]
+pr_status: merged
 ---
 
 Someone configured the Tempo data source to show `resource.k8s.cluster_name` and `resource.k8s.namespace` as static search fields in Explore, and the labels overflowed their column. The screenshot in the issue is the whole bug: a tidy form with two field labels that are too long for the space they were given, wrapping and colliding with the inputs next to them. The ask was simple and reasonable — let me rename these. It turned out the reason you could not rename them is the same reason they were too long in the first place.
@@ -83,4 +84,4 @@ I went with the rename because it is what the issue asked for, and because a lat
 
 The tests cover the new path — a label wins, and it wins even over the `name` special case — but the one I cared most about is the fallback, because that is the assertion I had wrong in my head. The test pins `filterTitle` with no label to `Resource K 8 S Cluster Name`, the actual `startCase` output, not the cleaned-up version I assumed. If someone changes how titles are derived, that test fails and tells them the visible label changed. Writing down the ugly real string is more useful than writing down the pretty wrong one.
 
-The change is in [grafana/grafana-tempo-datasource#205](https://github.com/grafana/grafana-tempo-datasource/pull/205).
+The change is in [grafana/grafana-tempo-datasource#205](https://github.com/grafana/grafana-tempo-datasource/pull/205), now merged.
