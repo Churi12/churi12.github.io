@@ -88,6 +88,9 @@ Commit, push to `main`, the Actions workflow builds and deploys in ~1 minute.
 - `2026-06-28` The CNI pod was waiting for a file only it could write → istio/istio#60721
 - `2026-06-28` A CIDR and a list of /32s should be the same thing → istio/istio#60722
 - `2026-06-29` The label that wrapped → grafana/grafana-tempo-datasource#205
+- `2026-07-26` Argo CD resolved my Helm chart as a git repo → argoproj/argo-cd#28904
+- `2026-07-26` The cache was right there, just not reachable → argoproj/argo-cd#28905
+- `2026-07-26` Letting pyroscope.write decide what to do with a 429 → grafana/alloy#6763
 
 ## Tool icons (added 2026-06-18)
 
