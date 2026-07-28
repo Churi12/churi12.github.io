@@ -4,6 +4,7 @@ title: "Letting pyroscope.write decide what to do with a 429"
 date: 2026-07-26
 author: Miguel Santos
 tags: [alloy]
+pr_status: merged
 ---
 
 An Alloy issue asked for something small and reasonable: a way to tell `pyroscope.write` not to retry when the backend returns HTTP 429. By default it retries rate-limited profiles, which is usually right, but if you would rather drop them than pile more requests onto a backend that is already asking you to slow down, there was no way to say so. `loki.write` and `prometheus.remote_write` both already expose a `retry_on_http_429` flag. `pyroscope.write` did not. This is the kind of change I enjoy: the design decision is already made, you just have to match it.
@@ -63,6 +64,10 @@ I tested this at two levels. `shouldRetry` is pure, so I tested it directly: a 4
 
 Then, because a unit test of a predicate does not prove the flag is actually wired into the retry loop, I added two suite tests that stand up a server always returning 429 and count the requests. With `retry_on_http_429` disabled the profile is sent exactly once. With it enabled the request is retried up to `MaxBackoffRetries` times. Asserting on the observed request count is what convinces me the flag reaches the loop and not just the predicate.
 
+## What review caught
+
+The reviewer, agreeing with an automated review comment, pointed out something I had missed: `pyroscope.write` does not only talk HTTP. The push v1 path speaks Connect, and there a rate limit arrives as `connect.CodeResourceExhausted` rather than an HTTP 429. My first version left that path always retrying, so the new flag was only half honoured depending on which API the profile went out through. Same rate limit, same user intent, two code paths, and I had only found one. The fix was to gate the Connect code the same way, correct the docs to say plainly that 408 is always retried regardless of the flag, and add a test that drives `fanOutClient.Append` through a real Connect test server returning `CodeResourceExhausted`, because a unit test on the predicate would never have caught the gap. Worth remembering next time I add a knob to a component: find every transport the option is supposed to apply to before claiming it is done.
+
 ## The takeaway
 
-When a project already has an established convention for a thing, the best contribution is often the least original one: find the precedent, match its name, its default, and its behavior, and make the new option indistinguishable from the ones that came before. A user who already knows `retry_on_http_429` from `loki.write` should not have to learn anything new to use it on `pyroscope.write`. Consistency across siblings is a feature. The change is in [grafana/alloy#6763](https://github.com/grafana/alloy/pull/6763).
+When a project already has an established convention for a thing, the best contribution is often the least original one: find the precedent, match its name, its default, and its behavior, and make the new option indistinguishable from the ones that came before. A user who already knows `retry_on_http_429` from `loki.write` should not have to learn anything new to use it on `pyroscope.write`. Consistency across siblings is a feature. The change is in [grafana/alloy#6763](https://github.com/grafana/alloy/pull/6763), now merged.
