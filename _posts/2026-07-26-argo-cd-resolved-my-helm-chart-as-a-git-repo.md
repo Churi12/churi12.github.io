@@ -4,6 +4,7 @@ title: "Argo CD resolved my Helm chart as a git repo"
 date: 2026-07-26
 author: Miguel Santos
 tags: [argo-cd]
+pr_status: merged
 ---
 
 Someone reported an Argo CD regression that only shows up in a fairly specific shape of Application: a multi-source app that combines an untyped Helm chart source with a git values source and the `argocd.argoproj.io/manifest-generate-paths` annotation. On v3.4.3 it started failing with:
@@ -72,4 +73,4 @@ While iterating on this PR I accepted a Copilot autofix suggestion in the GitHub
 
 ## The takeaway
 
-`Normalize`-style helpers that fill in defaults are convenient right up to the moment a downstream decision depends on the difference between "unset" and "the default value." Coercing empty-to-git erased exactly the signal the guard needed. When a default is applied, ask whether anything later treats the defaulted value as if the user had chosen it, because that is where the surprises live. The change is in [argoproj/argo-cd#28904](https://github.com/argoproj/argo-cd/pull/28904).
+`Normalize`-style helpers that fill in defaults are convenient right up to the moment a downstream decision depends on the difference between "unset" and "the default value." Coercing empty-to-git erased exactly the signal the guard needed. When a default is applied, ask whether anything later treats the defaulted value as if the user had chosen it, because that is where the surprises live. The change is in [argoproj/argo-cd#28904](https://github.com/argoproj/argo-cd/pull/28904), now merged. It also had a sequel: it landed eighteen minutes after another PR it silently conflicted with, and broke master. That story is in [Two green PRs, one broken master](/2026/07/two-green-prs-one-broken-master/).
