@@ -62,7 +62,7 @@ assert.Equalf(t, tt.want, got, "UpdateRevisionForPaths(%v, %v)", tt.args.ctx, tt
 
 Because `want` omitted `Changes`, it took the zero value `false`, and the struct comparison enforced it. I checked that the assertion has teeth by flipping the expectation to `Changes: true` locally, which fails as expected. So there was no coverage gap.
 
-The point still stood on readability, though. `Changes: false` is the outcome that proves the git path ran and found no changes, and leaving it implicit means a reader cannot tell whether `false` was intended or simply forgotten. The sibling case directly above it already spells it out. So I opened a one-line follow-up, [#28984](https://github.com/argoproj/argo-cd/pull/28984), rather than leaving the reply as an argument for why I was already right. Being technically correct and being clear are different goals, and the reviewer was asking for the second one.
+The point still stood on readability, though. `Changes: false` is the outcome that proves the git path ran and found no changes, and leaving it implicit means a reader cannot tell whether `false` was intended or simply forgotten. The sibling case directly above it already spells it out. So I opened a one-line follow-up, [#28984](https://github.com/argoproj/argo-cd/pull/28984), rather than leaving the reply as an argument for why I was already right. It merged the same day. Being technically correct and being clear are different goals, and the reviewer was asking for the second one.
 
 ## The takeaway
 
