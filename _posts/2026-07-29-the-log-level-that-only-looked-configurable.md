@@ -4,6 +4,7 @@ title: "The log level that only looked configurable"
 date: 2026-07-29
 author: Miguel Santos
 tags: [airflow]
+pr_status: merged
 ---
 
 The Stackable Airflow operator generates Airflow's logging config from your CRD. You set a level, it renders the Python. An open issue asked for one specific thing: make the log level of the `task` handler configurable. There was even a comment in the source saying it needed doing.
@@ -71,8 +72,20 @@ The CRD version touched two repositories, needed a release of the shared crate b
 
 There is one honest wart, and I put it in the PR rather than in a footnote. This reinterprets a key that already does something. Today, raising `airflow.task` to ERROR suppresses records everywhere; afterwards it only quietens the UI. That is the improvement, and it is also a behaviour change, and someone relying on the old side effect to cut log volume would notice.
 
+## The reviewer found the one thing I had not run
+
+The rework got a CHANGES_REQUESTED, and it was not about the design. It was about the example I had written into the docs.
+
+I had documented `file` at DEBUG with `airflow.task` at INFO, and claimed that wrote DEBUG to the log files and to Vector while the UI stayed at INFO. It does not do that. With `airflow.task` at INFO the logger sits at INFO, so the DEBUG records are discarded there, before the file handler ever sees them. The clamp I was so pleased with is exactly what makes that combination impossible.
+
+The mechanism I had explained in the PR was right. The example I built on top of it was wrong, and the reason it survived is embarrassingly simple: I verified the mechanism by running the generated config through `dictConfig`, and I verified the example by reading it. So the fix was to pick an example that actually works, `airflow.task` at WARN, which quietens the UI while console and file keep receiving INFO, and to run that one too.
+
+Below INFO the two are coupled and there is no way around it. A logger throws records away before any of its handlers can filter them, so lowering the UI on its own cannot work, no matter how it is implemented. At or above INFO they diverge and only the UI goes quiet. The docs now say both directions instead of implying they are symmetric.
+
+The tests changed shape as well. Instead of one case per level scattered around, there is a table listing all seven levels next to the resulting handler level and logger level, so the asymmetry is visible in one place. I checked the table actually guards something by removing the clamp: five tests go red.
+
 ## The takeaway
 
 I spent most of the effort on the version that got thrown away, and the reason is not that the design was wrong. It is that I accepted the framing in my own head, that a handler level needs a handler field, and never asked whether the value could come from somewhere that already existed. The maintainer did not know Airflow's logging internals better than I did by then. He just had not adopted my constraint.
 
-Worth noticing too that he arrived at the answer by reading the documentation and saying what he expected to be true. When a reviewer tells you what they assumed the feature already did, that is not confusion to correct. It is a fairly direct hint about where the feature belongs. The change is in [stackabletech/airflow-operator#829](https://github.com/stackabletech/airflow-operator/pull/829).
+Worth noticing too that he arrived at the answer by reading the documentation and saying what he expected to be true. When a reviewer tells you what they assumed the feature already did, that is not confusion to correct. It is a fairly direct hint about where the feature belongs. And the second lesson is narrower but cost me a round of review: run the exact example you put in the docs. A verified mechanism is not a verified example. The change is in [stackabletech/airflow-operator#829](https://github.com/stackabletech/airflow-operator/pull/829), now merged.
