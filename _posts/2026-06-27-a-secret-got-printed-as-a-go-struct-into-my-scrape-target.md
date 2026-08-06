@@ -51,9 +51,9 @@ case v.Reflect().CanInterface():
 
 An `OptionalSecret` is not a string, so it hits the second branch, and `%v` on a struct gives you exactly `{true 10.0.0.1:9090}`. The boolean is `IsSecret`, the rest is `Value`. The code was never wrong about the value — it just printed the whole box instead of what was inside it. And `convert.nonsensitive()` worked around it precisely because it turned the capsule back into a plain string before it reached this branch.
 
-## The fix: unwrap the box
+## The fix I wrote: unwrap the box
 
-The two capsule types that wrap a string here are `OptionalSecret` and `Secret`. The fix is to pull the underlying string out of them before the `%v` fallback:
+The two capsule types that wrap a string here are `OptionalSecret` and `Secret`. My first fix pulled the underlying string out of them before the `%v` fallback:
 
 ```go
 case v.Reflect().CanInterface():
@@ -67,14 +67,46 @@ case v.Reflect().CanInterface():
 	}
 ```
 
-I thought about doing this generically — ask any capsule to convert itself to a string — but `OptionalSecret` deliberately refuses that conversion when it actually holds a secret, so a generic path would either drop the value or fall back to the struct again. Naming the two types keeps the behavior explicit, which is what you want in code that builds scrape targets.
+I flagged one wart in the PR and talked myself past it: when the value really is a secret, this puts the real string into the target label. My argument was that it is not a *new* leak, since the old code already put that same string into the label, just wrapped in `{true ...}`. Unmangling it, I reasoned, does not make the exposure worse.
 
-One thing worth being honest about: when the value really is a secret, this now puts the real string into the target label. That is not a new leak. The old code already put that same string into the label — just wrapped in `{true ...}`. If you put a secret in a target, it ends up in the target either way; this change only stops mangling it. Putting a secret in a target address is arguably the wrong move, but that is a separate conversation from "the value should not be a struct literal."
+## The maintainer found the assumption under the wart
+
+kalleep did not accept the framing, and he was right not to:
+
+> it think it's an oversight that we even convert secrets here in the first place, even though the value is not usable. IMO we should not convert Secrets at all and only convert optional secrets if `IsSecret == false`.
+
+That reply reframes the whole bug. I had been asking "what string is inside this box?" when the question was "should a secret ever become a target address at all?" And it cannot: a scrape target is a label value, it gets logged, exported in metrics metadata, and shown in the UI. A secret is not merely awkward there, it is *never usable* there. The right answer is not to unwrap it more cleanly, it is to refuse.
+
+So the shipped fix rejects instead of converting:
+
+```go
+switch raw := rv.Interface().(type) {
+case alloytypes.Secret:
+	return fmt.Errorf("target::ConvertFrom: cannot use a secret as a target value")
+case alloytypes.OptionalSecret:
+	if raw.IsSecret {
+		return fmt.Errorf("target::ConvertFrom: cannot use a secret as a target value")
+	}
+	strValue = raw.Value
+default:
+	strValue = fmt.Sprintf("%v", raw)
+}
+```
+
+An `OptionalSecret` holding a non-secret still unwraps to its string, which is the actual reported case and the thing that was broken. A real `Secret`, and an `OptionalSecret` that is genuinely secret, now produce a config error at evaluation time instead of quietly landing in a label.
+
+While I was in there I also handled a nil capsule value, which the old `CanInterface()` branch would have panicked on rather than reported.
+
+I prefer the result to what I proposed. My version made the symptom go away and left the design mistake in place; his makes the config fail loudly at the point where someone asked for something that cannot work.
 
 ## Proving it before trusting it
 
-The part I never skip: I wrote the test, then reverted the fix to watch it fail. With the fix gone the test produces `{true 10.0.0.1:9090}` — the exact string from the bug report — and with the fix back it produces `10.0.0.1:9090`. A test that has never been seen to fail is not a regression guard, it is decoration. Three cases cover a non-secret optional, a secret optional, and a plain `Secret`, all run through Alloy's real evaluator so it exercises the same path the config does.
+The part I never skip: I wrote the test, then reverted the fix to watch it fail. With the fix gone the non-secret case produces `{false 10.0.0.1:9090}`, the same struct-instead-of-string shape as the bug report, and with the fix back it produces `10.0.0.1:9090`. A test that has never been seen to fail is not a regression guard, it is decoration.
+
+After the rework the tests assert the new contract rather than the old one: a non-secret optional unwraps, a real `Secret` and a secret-holding `OptionalSecret` each produce the specific rejection error, and a nil capsule value errors instead of panicking. Asserting the *specific* error matters — an earlier version of the test accepted any evaluation failure, which would have passed even if the config had broken for an entirely unrelated reason.
 
 ## The takeaway
 
-`fmt.Sprintf("%v", x)` is a fine last resort and a bad default. The moment `x` can be a struct that wraps the thing you actually wanted, `%v` will happily hand you the wrapper. When a value passes through a type system that boxes things — secrets, optionals, capsules — the conversion back out is a real step, not something to leave to default formatting. The change is in [grafana/alloy#6605](https://github.com/grafana/alloy/pull/6605).
+`fmt.Sprintf("%v", x)` is a fine last resort and a bad default. The moment `x` can be a struct that wraps the thing you actually wanted, `%v` will happily hand you the wrapper. When a value passes through a type system that boxes things — secrets, optionals, capsules — the conversion back out is a real step, not something to leave to default formatting.
+
+But the lesson I actually took away is the other one. I noticed the uncomfortable part of my own fix, wrote it down honestly in the PR, and then argued for why it was acceptable. Writing a caveat down is not the same as resolving it. When you catch yourself explaining why a wart is tolerable, that is the moment to ask whether it is pointing at a wrong assumption one level up — because a reviewer will, and they will be reading the design while you are still defending the diff. The change is in [grafana/alloy#6605](https://github.com/grafana/alloy/pull/6605).
