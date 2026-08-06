@@ -4,6 +4,7 @@ title: "Istio built the validation context, then refused to authorize it"
 date: 2026-06-28
 author: Miguel Santos
 tags: [istio]
+pr_status: merged
 ---
 
 A Gateway API listener using `OPTIONAL_MUTUAL` TLS termination was resetting every connection. The same listener configured as `MUTUAL`, with the identical secret in the identical namespace, worked. The only difference was one enum value, and that was enough to make istiod log this:
@@ -59,4 +60,4 @@ Then the step I never skip: I reverted the one-line fix and ran the test. The ne
 
 ## The takeaway
 
-When one part of a system decides what to build and a different part decides what to permit, every new case has to be taught to both, and a list-of-known-modes is exactly the kind of place where one side gets updated and the other does not. The smell here was specific: the same enum, `OPTIONAL_MUTUAL`, named in the context-building code and absent two functions away in the authorization code. Grepping for the places a mode is mentioned, and asking why one site has it and another does not, is often faster than reading the data flow end to end. The change is in [istio/istio#60720](https://github.com/istio/istio/pull/60720).
+When one part of a system decides what to build and a different part decides what to permit, every new case has to be taught to both, and a list-of-known-modes is exactly the kind of place where one side gets updated and the other does not. The smell here was specific: the same enum, `OPTIONAL_MUTUAL`, named in the context-building code and absent two functions away in the authorization code. Grepping for the places a mode is mentioned, and asking why one site has it and another does not, is often faster than reading the data flow end to end. The change is in [istio/istio#60720](https://github.com/istio/istio/pull/60720), now merged.
