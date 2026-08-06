@@ -117,7 +117,7 @@ curving into the trunk) plus the lowercase word `merged`, as a small teal pill. 
 is the "Merged badge" block in `assets/style.css`. No badge shows without the front
 matter flag, so open PRs stay clean. To mark a newly merged PR: add the one front-matter
 line and (separately) append ", now merged." to that post's closing PR sentence. As of
-2026-07-31 nine posts carry it, covering ten landed PRs: alloy #6541, loki #22437,
+2026-08-06 ten posts carry it, covering eleven landed PRs: alloy #6541, loki #22437,
 loki #22438, argo-cd #28469, external-dns #6517, tempo-datasource #205, alloy #6763,
-argo-cd #28904, and argo-cd #28979 + #28984 (which share the merge-order-race post,
-so posts and merged PRs are no longer 1:1).
+argo-cd #28904, istio #60721, and argo-cd #28979 + #28984 (which share the
+merge-order-race post, so posts and merged PRs are no longer 1:1).
