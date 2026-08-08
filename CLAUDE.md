@@ -82,7 +82,7 @@ Commit, push to `main`, the Actions workflow builds and deploys in ~1 minute.
 - `2026-06-18` A timestamp was busting my Go build cache in Alloy → grafana/alloy#6541
 - `2026-06-18` Zone-aware Mimir pointed its ingress at a missing service → grafana/mimir#15740
 - `2026-06-23` ExternalDNS created the AAAA record, then forgot it existed → kubernetes-sigs/external-dns#6517
-- `2026-06-27` A secret got printed as a Go struct into my scrape target → grafana/alloy#6605
+- `2026-06-27` A secret got printed as a Go struct into my scrape target → grafana/alloy#6605 (merged)
 - `2026-06-27` Argo CD could not lock the ref, so it gave up → argoproj/argo-cd#28469
 - `2026-06-28` Istio built the validation context, then refused to authorize it → istio/istio#60720
 - `2026-06-28` The CNI pod was waiting for a file only it could write → istio/istio#60721
@@ -117,7 +117,7 @@ curving into the trunk) plus the lowercase word `merged`, as a small teal pill. 
 is the "Merged badge" block in `assets/style.css`. No badge shows without the front
 matter flag, so open PRs stay clean. To mark a newly merged PR: add the one front-matter
 line and (separately) append ", now merged." to that post's closing PR sentence. As of
-2026-08-06 twelve posts carry it, covering thirteen landed PRs: alloy #6541, loki #22437,
+2026-08-08 thirteen posts carry it, covering fourteen landed PRs: alloy #6541, loki #22437,
 loki #22438, argo-cd #28469, external-dns #6517, tempo-datasource #205, alloy #6763,
-argo-cd #28904, istio #60720, istio #60721, airflow-operator #829, and argo-cd #28979 + #28984 (which share the
+alloy #6605, argo-cd #28904, istio #60720, istio #60721, airflow-operator #829, and argo-cd #28979 + #28984 (which share the
 merge-order-race post, so posts and merged PRs are no longer 1:1).

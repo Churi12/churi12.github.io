@@ -4,6 +4,7 @@ title: "A secret got printed as a Go struct into my scrape target"
 date: 2026-06-27
 author: Miguel Santos
 tags: [alloy]
+pr_status: merged
 ---
 
 Someone reported an Alloy config where they read a value out of a file and used it as a scrape target address. Instead of the address, the target came out as `{true 10.0.0.1:9090}` — the IP wrapped in what is unmistakably a Go struct printed with `%v`. The workaround they found was to wrap the value in `convert.nonsensitive()`, which is a strong hint about where to look. This is the kind of bug I like: the symptom names the cause if you know the codebase, and the fix is a few lines once you see it.
@@ -109,4 +110,4 @@ After the rework the tests assert the new contract rather than the old one: a no
 
 `fmt.Sprintf("%v", x)` is a fine last resort and a bad default. The moment `x` can be a struct that wraps the thing you actually wanted, `%v` will happily hand you the wrapper. When a value passes through a type system that boxes things — secrets, optionals, capsules — the conversion back out is a real step, not something to leave to default formatting.
 
-But the lesson I actually took away is the other one. I noticed the uncomfortable part of my own fix, wrote it down honestly in the PR, and then argued for why it was acceptable. Writing a caveat down is not the same as resolving it. When you catch yourself explaining why a wart is tolerable, that is the moment to ask whether it is pointing at a wrong assumption one level up — because a reviewer will, and they will be reading the design while you are still defending the diff. The change is in [grafana/alloy#6605](https://github.com/grafana/alloy/pull/6605).
+But the lesson I actually took away is the other one. I noticed the uncomfortable part of my own fix, wrote it down honestly in the PR, and then argued for why it was acceptable. Writing a caveat down is not the same as resolving it. When you catch yourself explaining why a wart is tolerable, that is the moment to ask whether it is pointing at a wrong assumption one level up — because a reviewer will, and they will be reading the design while you are still defending the diff. The change is in [grafana/alloy#6605](https://github.com/grafana/alloy/pull/6605), now merged.
