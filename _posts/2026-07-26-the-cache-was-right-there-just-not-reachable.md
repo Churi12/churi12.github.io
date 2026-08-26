@@ -77,4 +77,16 @@ The test I care most about here does not assert a return value, it asserts an ab
 
 ## The takeaway
 
-Sometimes the fix for "this does too much I/O" is not a new cache or a new client, it is a wire. The right data was already sitting in memory, synced and ready; it just was not plumbed to the caller that needed it. When you see a hot path doing live lookups, check whether something nearby already has the answer cached before you reach for a bigger hammer. The change is in [argoproj/argo-cd#28905](https://github.com/argoproj/argo-cd/pull/28905).
+Sometimes the fix for "this does too much I/O" is not a new cache or a new client, it is a wire. The right data was already sitting in memory, synced and ready; it just was not plumbed to the caller that needed it. When you see a hot path doing live lookups, check whether something nearby already has the answer cached before you reach for a bigger hammer. The change was in [argoproj/argo-cd#28905](https://github.com/argoproj/argo-cd/pull/28905).
+
+## Postscript: the same fix, under someone else's number
+
+My PR was closed on 24 August, unmerged, with one line: closing in favor of [#28815](https://github.com/argoproj/argo-cd/pull/28815). That is the right call, and it is worth writing down why rather than quietly deleting this post.
+
+[#28815](https://github.com/argoproj/argo-cd/pull/28815) does the same thing I did, reads the AppProject from the informer cache instead of doing a live `Get` per trigger evaluation, and it does it better in two ways. It threads the informer in properly, as a `SetAppProjectInformer` on the notification service wired up in `NewController`, instead of my optional getter function and the exported-signature change I had to apologise for above. And it fixes a second bug in the same code path that I walked straight past: the old lookup used the application's namespace rather than the control-plane namespace, so for anyone running apps-in-any-namespace it 404s and logs a failure for every application on every reconcile. I was so focused on the call count that I never questioned the arguments.
+
+It was also opened on 20 July, six days before mine.
+
+That last fact is the actual lesson, and it is not a technical one. I checked for existing work before starting, the way I always do: I read the issue I was fixing and followed its cross-references. But the two PRs cite different issues, mine [#28530](https://github.com/argoproj/argo-cd/issues/28530) and theirs [#28137](https://github.com/argoproj/argo-cd/issues/28137), so nothing linked them and the timeline check came back clean. Two people had found the same regression from two different reports. What would have caught it is a search I did not run: the files. Both PRs touch `notification_controller/controller/controller.go` and `util/notification/settings/settings.go`, and a plain PR search on either path would have shown me #28815 sitting there before I wrote a line.
+
+So the analysis in this post held up, the fix shipped, and the code I wrote is not in Argo CD. I would rather have spent that week on something nobody else was already doing. Now I search by file before I search by issue.

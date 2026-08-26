@@ -4,6 +4,7 @@ title: "A CIDR and a list of /32s should be the same thing, but one broke the si
 date: 2026-06-28
 author: Miguel Santos
 tags: [istio]
+pr_status: merged
 ---
 
 Someone reported a ServiceEntry that broke their sidecar in a way that made no sense at first. Write the addresses one way and the pod starts. Write the same addresses a different way and the pod never goes ready. The two forms cover the exact same eight IPs:
@@ -92,4 +93,4 @@ Then I turned that into a proper test with three cases: a CIDR service on 15001 
 
 ## The takeaway
 
-When a value gets rewritten partway through a function, any check that ran before the rewrite was answering a question about a state that no longer exists. The conflict guard here was correct for the bind it saw and wrong for the bind the code produced. The fix was not to make the early check smarter about the future, but to ask the question again at the point where the answer actually settles. And the reproduction-first habit paid for itself twice: it confirmed the bug was real before I touched anything, and it caught the over-eager version of the fix that would have broken ordinary CIDR services. The change is in [istio/istio#60722](https://github.com/istio/istio/pull/60722).
+When a value gets rewritten partway through a function, any check that ran before the rewrite was answering a question about a state that no longer exists. The conflict guard here was correct for the bind it saw and wrong for the bind the code produced. The fix was not to make the early check smarter about the future, but to ask the question again at the point where the answer actually settles. And the reproduction-first habit paid for itself twice: it confirmed the bug was real before I touched anything, and it caught the over-eager version of the fix that would have broken ordinary CIDR services. The change is in [istio/istio#60722](https://github.com/istio/istio/pull/60722), now merged.
