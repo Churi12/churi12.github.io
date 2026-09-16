@@ -75,6 +75,31 @@ used when picking the address to advertise. And the two server listeners go thro
 
 An issue is a bug report, not a specification. The reporter knows what they need, which does not mean they know what the code does.
 
+## The one place that did want brackets
+
+Having decided the brackets were wrong, I then shipped a change that missed the one place they were right.
+
+The review bot pointed out that the chart bundles Kafka, and that its statefulset hardcodes the listeners:
+
+```
+KAFKA_LISTENERS = PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+```
+
+`kafka.enabled` defaults to true, so the component I had left on IPv4 was in the default install. My changelog entry said the value would "run the whole installation on IPv6", which was not true for anyone who did not bring their own broker.
+
+What makes this one uncomfortable is that the evidence was already sitting in my own pull request. The golden record I generated and committed contained that line, and it was the *only* IPv4 literal left anywhere in the rendered IPv6 tree. One `grep` over the artifact I had produced myself would have found it. I had verified that the 30 other test cases were unchanged, which was the question I thought to ask, and never asked whether the one case I added was actually fully IPv6.
+
+The fix inverts the whole point of this post. Kafka parses each listener as a URI, so there the wildcard host does have to be bracketed:
+
+```
+IPv4:  PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+IPv6:  PLAINTEXT://[::]:9092,CONTROLLER://[::]:9093
+```
+
+So the chart now emits `::` in five places and `[::]` in one, and both are correct. The rule is not "IPv6 addresses do not take brackets" — it is that brackets belong to URI syntax, where a colon separates host from port and the address is full of colons. dskit takes a host and a port as separate values, so it wants the bare form. Kafka takes a URI, so it wants the bracketed one. The format follows the consumer, not the address.
+
+I also want to be honest about the limit of the verification. I re-rendered all 31 test cases and confirmed only the IPv6 one moves and no IPv4 literal survives in it. I did not boot an IPv6-only cluster, so what I have checked is what the chart renders, not that the broker comes up. That distinction is in the PR body too, because it is exactly the sort of thing a reviewer cannot check for themselves.
+
 ## The ring nobody mentioned
 
 The issue lists the components to cover. The query-frontend is not among them, and it has a ring.
