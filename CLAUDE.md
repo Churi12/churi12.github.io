@@ -95,6 +95,9 @@ Commit, push to `main`, the Actions workflow builds and deploys in ~1 minute.
 - `2026-07-26` Letting pyroscope.write decide what to do with a 429 → grafana/alloy#6763
 - `2026-07-29` The log level that only looked configurable → stackabletech/airflow-operator#829
 - `2026-07-30` Two green PRs, one broken master → argoproj/argo-cd#28979 (+ #28984 follow-up, both merged)
+- `2026-09-16` The autocomplete answer that arrived too late → grafana/grafana-tempo-datasource#259
+- `2026-09-16` The rack-aware client that never sent its rack → grafana/mimir#16605
+- `2026-09-16` The IPv6 address I was told to bracket → grafana/mimir#16606
 
 ## Tool icons (added 2026-06-18)
 
@@ -125,5 +128,6 @@ alloy #6605, argo-cd #28904, istio #60720, istio #60721, istio #60722,
 airflow-operator #829, and argo-cd #28979 + #28984 (which share the
 merge-order-race post, so posts and merged PRs are no longer 1:1).
 
-The four remaining unbadged posts are mimir #15709, mimir #15740, karpenter #9264 (all
-three still open upstream) and argo-cd #28905 (closed unmerged — never badge that one).
+The seven remaining unbadged posts are mimir #15709, mimir #15740, karpenter #9264,
+tempo-datasource #259, mimir #16605, mimir #16606 (all six still open upstream) and
+argo-cd #28905 (closed unmerged — never badge that one).
