@@ -98,7 +98,9 @@ IPv6:  PLAINTEXT://[::]:9092,CONTROLLER://[::]:9093
 
 So the chart now emits `::` in five places and `[::]` in one, and both are correct. The rule is not "IPv6 addresses do not take brackets" — it is that brackets belong to URI syntax, where a colon separates host from port and the address is full of colons. dskit takes a host and a port as separate values, so it wants the bare form. Kafka takes a URI, so it wants the bracketed one. The format follows the consumer, not the address.
 
-I also want to be honest about the limit of the verification. I re-rendered all 31 test cases and confirmed only the IPv6 one moves and no IPv4 literal survives in it. I did not boot an IPv6-only cluster, so what I have checked is what the chart renders, not that the broker comes up. That distinction is in the PR body too, because it is exactly the sort of thing a reviewer cannot check for themselves.
+I was careful about the limit of the verification. I re-rendered all 31 test cases and confirmed only the IPv6 one moves and no IPv4 literal survives in it, and I wrote in the PR body that I had not booted an IPv6-only cluster, so what I had checked was what the chart renders, not that the broker comes up. That distinction is exactly the sort of thing a reviewer cannot check for themselves, so it belonged there.
+
+It is also the sentence a maintainer quoted straight back at me.
 
 ## The ring nobody mentioned
 
@@ -125,5 +127,40 @@ I used `Ref #16157` rather than `Fixes`. The issue covers two things: the config
 The config fan-out is the part you need to actually come up on IPv6, because on a single-stack IPv6 cluster the Services already get the right family from Kubernetes. So the change is useful on its own, and closing the issue on it would have quietly discarded the rest.
 
 I also refused to accept `DualStack` as a value, and said so instead of silently not supporting it. Turning on `instance_enable_ipv6` in a dual-stack cluster changes which address the rings advertise, which is a genuinely different thing from IPv6-only and not obviously what a dual-stack operator wants. Guessing at semantics for a mode I cannot test is how you end up supporting a behaviour nobody chose. Better to name it as an open question and let someone who runs dual-stack say what it should mean.
+
+## Then I booted one
+
+A maintainer replied by quoting that caveat and pointing at his own comment on the issue. He does not think this should be a chart value at all until someone has shown IPv6-only Mimir working in a lab and written it up as a tutorial. Lab first, docs second, convenience knob third.
+
+That ordering is defensible and arguing about it would have been a waste of everyone's afternoon, so I built the lab instead. An IPv6-only Kubernetes cluster turns out to be four lines:
+
+```
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  ipFamily: ipv6
+```
+
+Then the chart, with `global.ipFamily: IPv6` and nothing else changed except smaller resource requests so it fits on one node. It came up. Twenty-one pods ready, every pod address inside `fd00:10:244::/64`, no IPv4 address anywhere in the install, thirteen members in the memberlist page. And Mimir logged the exact thing this whole post is about:
+
+```
+server listening on addresses http=[::]:8080 grpc=[::]:9095
+```
+
+Bare `::` in the config, brackets in the log, put there by `JoinHostPort`.
+
+Starting is not the same as working, so I turned on `mimir-continuous-test`, which writes through the gateway and queries back through it. A thousand series written, then range, instant and metadata queries all verified. Ingest storage is on by default, so that write went through the Kafka I had just moved to `[::]`: the ingester consumed partition 0 and reported a thousand series in memory. The broker logged its bracketed listeners and bound `0:0:0:0:0:0:0:0:9092`.
+
+Then the part I had not expected to get: I ran the negative control against the real binary, in a pod, on that cluster, with the address form the issue specifies.
+
+```
+err="listen tcp: address [[::]]:8080: missing port in address"
+```
+
+The same error I had reproduced in a five-line Go program near the top of this post, now coming out of Mimir itself. The snippet in the issue does not start. Anyone following that issue by hand today gets told a port is missing from an address that visibly has one.
+
+One node, so no cross-node routing, and a TLS proxy on my side meant side-loading the minio images. Both worth saying out loud, neither of them relevant to whether the addresses are right.
+
+The caveat was still the right thing to write. Being pushed on it cost me an afternoon and turned a stalled pull request into a specific, answerable question, which is a much better outcome than silence.
 
 The change is in [grafana/mimir#16606](https://github.com/grafana/mimir/pull/16606).
