@@ -61,6 +61,15 @@ Commit, push to `main`, the Actions workflow builds and deploys in ~1 minute.
   is at `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`. Render a
   static preview (inline the CSS, mirror the layout HTML) and `--screenshot` it,
   then look at it. A picture catches what greps miss.
+- **Liquid runs BEFORE markdown, including inside code fences.** A post that quotes
+  a Helm/Go template, or anything else containing `{{ ... }}` or `{% ... %}`, MUST
+  wrap the fence in `{% raw %}` / `{% endraw %}`. Without it Jekyll interpolates the
+  braces and **silently eats the code block and whatever follows it** — on
+  2026-09-16 an unescaped `{{ tpl (mergeOverwrite ...) }}` swallowed its own block
+  and the `## The brackets` heading after it. It builds green and deploys, so the
+  only way to catch it is to count headings/code blocks on the LIVE page. A local
+  markdown-only preview cannot see this class of bug, because the preview does not
+  run Liquid.
 - **Voice:** first-person, plain, specific, no filler or corporate tone. Every
   post ties back to something concrete (usually an upstream contribution Miguel
   made: "I hit this, read the source, fixed it, here's what I learned"). Sentence

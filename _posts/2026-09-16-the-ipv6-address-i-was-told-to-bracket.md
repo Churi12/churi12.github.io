@@ -14,16 +14,19 @@ The issue asking for one `global.ipFamily` value to do the fan-out has been open
 
 The mechanical half is a template that emits the derived config when IPv6 is on and an empty map when it is not:
 
+{% raw %}
 ```
 {{- define "mimir.ipv6Enabled" -}}
 {{- eq (.Values.global.ipFamily | default "IPv4") "IPv6" -}}
 {{- end -}}
 ```
+{% endraw %}
 
 and then `instance_enable_ipv6: true` on all ten rings, `memberlist.bind_addr: ["::"]`, both server listen addresses, plus dropping the IPv4 listener from the nginx gateway.
 
 Where it gets merged matters more than what it contains:
 
+{% raw %}
 ```
 {{ tpl (mergeOverwrite
           (include "mimir.unstructuredConfig" . | fromYaml)
@@ -31,6 +34,7 @@ Where it gets merged matters more than what it contains:
           .Values.mimir.structuredConfig
         | toYaml) . }}
 ```
+{% endraw %}
 
 (that is one line in the chart, wrapped here to be readable)
 
