@@ -12,7 +12,7 @@ The issue asking for one `global.ipFamily` value to do the fan-out has been open
 
 ## The fan-out
 
-The mechanical half is a template that emits the derived config when IPv6 is on and an empty map when it is not:
+The mechanical half is a template that emits the derived config when IPv6 is on and an empty map when it is not. This is what I shipped first and not what the chart ended up with, for reasons in the last section, but the addresses are the same either way:
 
 {% raw %}
 ```
@@ -126,7 +126,7 @@ I used `Ref #16157` rather than `Fixes`. The issue covers two things: the config
 
 The config fan-out is the part you need to actually come up on IPv6, because on a single-stack IPv6 cluster the Services already get the right family from Kubernetes. So the change is useful on its own, and closing the issue on it would have quietly discarded the rest.
 
-I also refused to accept `DualStack` as a value, and said so instead of silently not supporting it. Turning on `instance_enable_ipv6` in a dual-stack cluster changes which address the rings advertise, which is a genuinely different thing from IPv6-only and not obviously what a dual-stack operator wants. Guessing at semantics for a mode I cannot test is how you end up supporting a behaviour nobody chose. Better to name it as an open question and let someone who runs dual-stack say what it should mean.
+I also refused to accept `DualStack` as a value, and said so instead of silently not supporting it. The value itself is gone now, along with the rest of the template change, but the question it names is not. Turning on `instance_enable_ipv6` in a dual-stack cluster changes which address the rings advertise, which is a genuinely different thing from IPv6-only and not obviously what a dual-stack operator wants. Guessing at semantics for a mode I cannot test is how you end up supporting a behaviour nobody chose. Better to name it as an open question and let someone who runs dual-stack say what it should mean.
 
 ## Then I booted one
 
@@ -162,5 +162,19 @@ The same error I had reproduced in a five-line Go program near the top of this p
 One node, so no cross-node routing, and a TLS proxy on my side meant side-loading the minio images. Both worth saying out loud, neither of them relevant to whether the addresses are right.
 
 The caveat was still the right thing to write. Being pushed on it cost me an afternoon and turned a stalled pull request into a specific, answerable question, which is a much better outcome than silence.
+
+## Then the chart change deleted itself
+
+The maintainer's other point was that this should not be a chart-level switch at all. Not "not yet" — not ever. A `global.ipFamily` value is a mode, and a mode is a branch in every template that touches it plus a combination CI has to keep rendering forever. He wanted a values preset instead, like the `classic-architecture.yaml` and sizing presets the chart already ships, which are plain values files with no template support behind them.
+
+My first reaction was that a preset could not do it, because the bundled Kafka listeners are a hardcoded `KAFKA_LISTENERS` in the statefulset and a values file cannot reach into a container's env. That was wrong, and the thing that makes it wrong is a helper I had already read: `mimir.lib.containerEnv` merges `<component>.env` over the template defaults **by name**, in place. So a values file setting `KAFKA_LISTENERS` replaces the default rather than being appended next to it and losing to it.
+
+Which meant I could test his proposal instead of arguing about it. I installed the day's `main`, unmodified, with nothing but a values file, on the same IPv6-only cluster. Twenty-one pods up, all in `fd00:10:244::/64`, `mimir-continuous-test` writing a thousand series through the gateway and reading them back. The nginx gateway turned out to already carry both `listen 8080;` and `listen [::]:8080;`, so the one template change I thought was load-bearing was not needed either.
+
+So the pull request now adds three files and modifies no template. The evidence for that is the same golden-record tree the earlier version of this post is about: thirty of the thirty-one generated cases come back byte for byte identical, and the thirty-first is the new one. A diff that touches no template cannot regress an install that does not opt in, and that is a much easier review than "here is a new mode".
+
+The part I got to keep is the part this post is named after. The preset says `::` in five places and `[::]` in one, for exactly the reasons above. The brackets were never the chart's business.
+
+I lost the design and the change got smaller and better. Worth writing down which of those two facts matters.
 
 The change is in [grafana/mimir#16606](https://github.com/grafana/mimir/pull/16606).
