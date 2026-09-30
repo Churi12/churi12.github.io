@@ -107,6 +107,7 @@ Commit, push to `main`, the Actions workflow builds and deploys in ~1 minute.
 - `2026-09-16` The autocomplete answer that arrived too late → grafana/grafana-tempo-datasource#259
 - `2026-09-16` The rack-aware client that never sent its rack → grafana/mimir#16605
 - `2026-09-16` The IPv6 address I was told to bracket → grafana/mimir#16606
+- `2026-09-30` The store that remembered my Secret forever → grafana/alloy#7273
 
 ## Tool icons (added 2026-06-18)
 
@@ -137,6 +138,6 @@ alloy #6605, argo-cd #28904, istio #60720, istio #60721, istio #60722,
 airflow-operator #829, tempo-datasource #259, mimir #16606, and argo-cd #28979 + #28984
 (which share the merge-order-race post, so posts and merged PRs are no longer 1:1).
 
-The five remaining unbadged posts are mimir #15709, mimir #15740, karpenter #9264,
-mimir #16605 (all four still open upstream) and
+The six remaining unbadged posts are mimir #15709, mimir #15740, karpenter #9264,
+mimir #16605, alloy #7273 (all five still open upstream) and
 argo-cd #28905 (closed unmerged — never badge that one).
