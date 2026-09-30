@@ -4,6 +4,7 @@ title: "The autocomplete answer that arrived too late"
 date: 2026-09-16
 author: Miguel Santos
 tags: [tempo]
+pr_status: merged
 ---
 
 Type a tag value in the TraceQL editor, keep typing, and the suggestion list can end up showing values for something you already finished typing. The list is not wrong, exactly. It is just late. Every keystroke in a value position fires a `tag-values` lookup at Tempo, and nothing anywhere decides which of the answers still matters by the time they come back.
@@ -119,4 +120,4 @@ I got to the right answer through a review comment I initially assumed was noise
 
 The other thing worth saying out loud: the weak point of this change is the tests, not the code. `getOptionsV2` runs the query through `getTemplateSrv()`, so the new tests need `setTemplateSrv` in a `beforeAll` or they throw before they reach the mock. That is global state in a test file, and I do not love it. The alternative was to mock `getOptionsV2` itself, which would have made a tidier test that proved nothing, because the entire behaviour under test is whether the id reaches the datasource layer. A test that cannot fail for the real reason is not worth its tidiness.
 
-The change is in [grafana/grafana-tempo-datasource#259](https://github.com/grafana/grafana-tempo-datasource/pull/259).
+The change is in [grafana/grafana-tempo-datasource#259](https://github.com/grafana/grafana-tempo-datasource/pull/259), now merged.

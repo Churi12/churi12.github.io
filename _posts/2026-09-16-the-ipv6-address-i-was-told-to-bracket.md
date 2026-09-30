@@ -4,6 +4,7 @@ title: "The IPv6 address I was told to bracket"
 date: 2026-09-16
 author: Miguel Santos
 tags: [mimir]
+pr_status: merged
 ---
 
 Putting mimir-distributed on an IPv6-only cluster is not hard, it is just tedious in a way that guarantees mistakes. There is no single switch. There is `instance_enable_ipv6` on each component's ring, and there are ten of those. There is `memberlist.bind_addr`. There are the two server listen addresses. Miss one ring and that component cannot find a usable address to advertise, so it either fails to join or joins with a broken one, and you get to work out which of ten places you forgot.
@@ -177,4 +178,4 @@ The part I got to keep is the part this post is named after. The preset says `::
 
 I lost the design and the change got smaller and better. Worth writing down which of those two facts matters.
 
-The change is in [grafana/mimir#16606](https://github.com/grafana/mimir/pull/16606).
+The change is in [grafana/mimir#16606](https://github.com/grafana/mimir/pull/16606), now merged.
