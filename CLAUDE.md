@@ -119,7 +119,7 @@ labeled badge). The marks are ORIGINAL minimal geometry in the site's teal/mono 
 alloy = fused diamonds, external-dns = two linked nodes / a record resolving to an
 address, argo-cd = octagon ring with sync arrow, istio = three nodes wired through a
 center / the sidecar mesh, tempo = a trace waterfall / staggered spans on a
-timeline, airflow = a DAG fanning out into two downstream tasks), NOT the upstream brand logos — keeps the palette and avoids
+timeline, airflow = a DAG fanning out into two downstream tasks, external-secrets = a key), NOT the upstream brand logos — keeps the palette and avoids
 trademark issues. Unknown tags fall back to a generic `>_` prompt glyph. To add a tool,
 add a `when` arm to the include and (optionally) note it here. SVGs use `currentColor`;
 styling is in the "Tool icons" block of `assets/style.css`.
