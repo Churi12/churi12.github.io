@@ -4,6 +4,7 @@ title: "The store that remembered my Secret forever"
 date: 2026-09-30
 author: Miguel Santos
 tags: [alloy]
+pr_status: merged
 ---
 
 `mimir.alerts.kubernetes` is the Alloy component that watches `AlertmanagerConfig` resources in a cluster and pushes the merged Alertmanager configuration to Mimir. A user reported that it ignored changes to Secrets. They had an `AlertmanagerConfig` with an MS Teams receiver that read its webhook URL from a Secret. They added a key to that Secret, and the component failed every sync with this, until they restarted Alloy:
@@ -100,4 +101,4 @@ I ran it against main before writing the fix, and it failed at step two with the
 
 A cache comes with a lifetime, and you do not see the lifetime at the call site. `NewStoreBuilder` returns something that looks like a client. You can hold it in a struct field, pass it around, and everything works as long as nothing changes. The only place that says "one per reconcile" is a doc comment on the type. When a fix adds a dependency to stop a crash, it is worth asking how long that dependency is meant to live, not just whether it is non-nil.
 
-The change is in [grafana/alloy#7273](https://github.com/grafana/alloy/pull/7273).
+The change is in [grafana/alloy#7273](https://github.com/grafana/alloy/pull/7273), now merged.
